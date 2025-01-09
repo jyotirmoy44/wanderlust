@@ -38,13 +38,15 @@ pipeline {
         }
 
         stage('Build Frontend') {
-            steps {
-                sh '''
-                cd ${FRONTEND_DIR}
-                npm run build
-                '''
-            }
-        }
+    steps {
+        sh '''
+        cd ${FRONTEND_DIR}
+        npm run build
+        echo "Contents of build directory:"
+        ls -al ${FRONTEND_DIR}/build
+        '''
+    }
+}
 
         stage('Deploy Frontend') {
             steps {
