@@ -1,5 +1,6 @@
 {
 	"dependencies": {
+		"react-scripts": "^5.0.1",
 		"concurrently": "^8.2.2",
 		"js-cookie": "^3.0.5"
 	},
