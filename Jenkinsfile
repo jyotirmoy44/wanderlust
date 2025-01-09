@@ -31,9 +31,10 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh '''
-                cd ${FRONTEND_DIR} && npm install
-                cd ../${BACKEND_DIR} && npm install
+                cd ${FRONTEND_DIR} && npm install --force
+                cd ../${BACKEND_DIR} && npm install --force
                 '''
+
             }
         }
 
