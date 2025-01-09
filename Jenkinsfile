@@ -46,9 +46,8 @@ pipeline {
                 // Correct. Ensures build output is verified
                 sh '''
                 cd ${FRONTEND_DIR}
-                npm run build || exit 1
+                npm run build --verbose || exit 1
                 echo "Build command completed. Checking build directory..."
-                ls -al dist
                 '''
             }
         }
