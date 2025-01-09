@@ -48,7 +48,7 @@ pipeline {
                 cd ${FRONTEND_DIR}
                 npm run build || exit 1
                 echo "Build command completed. Checking build directory..."
-                ls -al build
+                ls -al dist
                 '''
             }
         }
