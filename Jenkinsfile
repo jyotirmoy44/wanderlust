@@ -12,24 +12,28 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
+                // Correct. Checks out the 'main' branch of the specified Git repository.
                 git branch: 'main', url: 'https://github.com/jyotirmoy44/wanderlust.git'
             }
         }
 
         stage('Setup Node.js') {
             steps {
+                // Ensure nvm setup persists for the current and subsequent steps
                 sh '''
-                curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
                 export NVM_DIR="$HOME/.nvm"
+                curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
                 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
                 nvm install ${NODE_VERSION}
-                nvm use ${NODE_VERSION}
+                nvm alias default ${NODE_VERSION}
+                nvm use default
                 '''
             }
         }
 
         stage('Install Dependencies') {
             steps {
+                // Correctly navigates to frontend and backend directories to install dependencies
                 sh '''
                 cd ${FRONTEND_DIR} && npm install --force
                 cd ../${BACKEND_DIR} && npm install --force
@@ -38,19 +42,21 @@ pipeline {
         }
 
         stage('Build Frontend') {
-    steps {
-        sh '''
-        cd ${FRONTEND_DIR}
-        npm run build
-        echo "Contents of build directory:"
-        ls -al ${FRONTEND_DIR}/build
-        '''
-    }
-}
+            steps {
+                // Correct. Ensures build output is verified
+                sh '''
+                cd ${FRONTEND_DIR}
+                npm run build || exit 1
+                echo "Build command completed. Checking build directory..."
+                ls -al build
+                '''
+            }
+        }
 
         stage('Deploy Frontend') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'aws-credentials-id', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                    // Correct. Syncs build files to S3 and ensures it cleans old files.
                     sh '''
                     aws sts get-caller-identity
                     aws s3 sync ${FRONTEND_DIR}/build s3://${S3_BUCKET} --delete
