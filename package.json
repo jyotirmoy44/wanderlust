@@ -4,6 +4,7 @@
 		"js-cookie": "^3.0.5"
 	},
 	"scripts": {
+		"build": "react-scripts build"
 		"start-frontend": "cd frontend && npm run dev",
 		"start-backend": "cd backend && npm start",
 		"start": "concurrently -n \"FRONTEND,BACKEND\" -c \"bgBlue,bgYellow\" -p \"[{name}]\" \"npm run start-frontend\" \"npm run start-backend\"",
